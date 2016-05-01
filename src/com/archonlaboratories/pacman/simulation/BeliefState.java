@@ -2,6 +2,7 @@ package com.archonlaboratories.pacman.simulation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Defines a belief state over a given world.
@@ -29,6 +30,14 @@ public class BeliefState
         dirty = true;
     }
 
+    public BeliefState(Set<World.Tile> tiles, double initValue)
+    {
+        Map<World.Tile, Double> map = new HashMap<>();
+
+        for (World.Tile tile : tiles)
+            map.put(tile, initValue);
+    }
+
     /**
      * Gets the normalized probability of being at the given tile.
      * Normalizes if not done yet.
@@ -38,8 +47,8 @@ public class BeliefState
      */
     public double getProbability(World.Tile tile)
     {
-        if (dirty)
-            this.normalizeBeliefState(); // handle elegantly later.
+//        if (dirty)
+//            this.normalizeBeliefState(); // handle elegantly later.
 
         return beliefs.get(tile);
     }
@@ -84,5 +93,10 @@ public class BeliefState
             beliefs.put(tile, beliefs.get(tile) * normFactor);
 
         dirty = false;
+    }
+
+    public Set<World.Tile> getTileSet()
+    {
+        return beliefs.keySet();
     }
 }

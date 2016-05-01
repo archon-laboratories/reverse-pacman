@@ -3,8 +3,10 @@ package com.archonlaboratories.pacman.agent;
 import com.archonlaboratories.pacman.simulation.Action;
 import com.archonlaboratories.pacman.simulation.BeliefState;
 import com.archonlaboratories.pacman.simulation.Simulation;
+import com.archonlaboratories.pacman.simulation.World;
 
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Defines a ghost in the simulation.
@@ -13,10 +15,14 @@ public class Ghost
 {
     private BeliefState location;
     private WallSensor sensor;
+    private Puppeteer puppeteer; // TODO: Figure out how puppeteer is assigned.
+    private World world;
 
     public Ghost(Simulation current)
     {
         sensor = new WallSensor(current);
+        world = current.world;
+        location = new BeliefState(world.getTileSet(), 1);
     }
 
     /**
@@ -34,8 +40,19 @@ public class Ghost
      */
     public void performUpdate()
     {
-        // TODO
-        int numWalls = performSensing();
+        int evidence = performSensing();
+        Set<World.Tile> tiles = world.getTileSet();
+
+        for (World.Tile tile : tiles)
+        {
+            double updatedProb = location.getProbability(tile);
+            updatedProb *= sensor.getErrorFactor(Math.abs(evidence - tile.getNumWalls()));
+            location.setProbability(tile, updatedProb);
+        }
+
+        location.normalizeBeliefState();
+
+        puppeteer.updateReward(location);
 
         // Should this return void?
     }
@@ -59,8 +76,20 @@ public class Ghost
      */
     public Action performAction()
     {
-        // TODO
-        return null;
+        Action actionToTake = puppeteer.requestAction(location);
+        BeliefState nextLocation = new BeliefState(world.getTileSet(), 0);
+
+        for (World.Tile tile : world.getTileSet())
+        {
+            World.Tile nextTile = tile.getNextTile(actionToTake);
+            double updatedProb = nextLocation.getProbability(nextTile) + location.getProbability(tile);
+            nextLocation.setProbability(nextTile, updatedProb);
+        }
+
+        nextLocation.normalizeBeliefState();
+        location = nextLocation;
+
+        return actionToTake;
     }
 
     /**
@@ -86,7 +115,8 @@ public class Ghost
 
         /**
          * Initializes the wall sensor
-         * @param container
+         *
+         * @param container current Simulation the ghost is contained in.
          */
         WallSensor(Simulation container)
         {
@@ -126,7 +156,31 @@ public class Ghost
             else
                 return 0;
         }
-    }
 
+        /**
+         * Gets the probability of the given difference between
+         * evidence and reality at a tile.
+         *
+         * @param difference absolute value of actual - evidence
+         * @return Probability of this difference occurring.
+         */
+        private double getErrorFactor(int difference)
+        {
+            switch (difference)
+            {
+                case 0:
+                    return .8;
+                case 1:
+                    return .15;
+                case 2:
+                    return .04;
+                case 3:
+                    return .01;
+                default:
+                    System.exit(10);
+                    return -1; // Never reached
+            }
+        }
+    }
 
 }
