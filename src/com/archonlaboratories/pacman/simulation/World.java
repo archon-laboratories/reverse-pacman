@@ -1,7 +1,9 @@
 package com.archonlaboratories.pacman.simulation;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Defines the world for a simulation.
@@ -9,17 +11,28 @@ import java.util.Map;
 public class World
 {
     public final Tile[][] tiles;
+    private final Set<Tile> tileSet;
 
     World(boolean[][] activations)
     {
         tiles = new Tile[activations.length][activations[0].length];
+        tileSet = new HashSet<>();
 
         for (int x = 0; x < activations.length; x++)
             for (int y = 0; y < activations[x].length; y++)
+            {
                 if (activations[x][y])
                     tiles[x][y] = new Tile(x, y);
                 else
                     tiles[x][y] = null;
+
+                tileSet.add(tiles[x][y]);
+            }
+    }
+
+    public Set<Tile> getTileSet()
+    {
+        return tileSet;
     }
 
     /**
@@ -66,7 +79,7 @@ public class World
          * @param action Action to be taken in this tile
          * @return Tile that you move to after taking action.
          */
-        Tile getNextTile(Action action)
+        public Tile getNextTile(Action action)
         {
             if (nextTileMap == null)
                 initTileMap();
