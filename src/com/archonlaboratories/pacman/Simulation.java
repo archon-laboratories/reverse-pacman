@@ -39,7 +39,7 @@ public class Simulation
     }
 
     /**
-     * Performs teh simulation
+     * Performs the simulation
      *
      * @param dataset File that contains the information for this simulation.
      * @return Number of time-steps until the ghosts found pacman.
@@ -121,7 +121,7 @@ public class Simulation
                 int yCoord = Integer.parseInt(location[1]);
 
                 ghostLocations[ghostID] = world.tiles[xCoord][yCoord];
-                ghosts[ghostID] = new Ghost();
+                ghosts[ghostID] = new Ghost(this);
             }
 
         } catch (IOException e)
