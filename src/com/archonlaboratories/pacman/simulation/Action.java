@@ -1,4 +1,4 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.simulation;
 
 import java.util.Arrays;
 import java.util.Collections;

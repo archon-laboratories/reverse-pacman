@@ -1,4 +1,8 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.agent;
+
+import com.archonlaboratories.pacman.simulation.Action;
+import com.archonlaboratories.pacman.simulation.BeliefState;
+import com.archonlaboratories.pacman.simulation.Simulation;
 
 import java.util.Random;
 
@@ -28,7 +32,7 @@ public class Ghost
     /**
      * Updates the ghost's belief state in accordance with its sensors.
      */
-    void performUpdate()
+    public void performUpdate()
     {
         // TODO
         int numWalls = performSensing();
@@ -53,7 +57,7 @@ public class Ghost
      *
      * @return Action to be taken for this ghost from the simulation.
      */
-    Action performAction()
+    public Action performAction()
     {
         // TODO
         return null;

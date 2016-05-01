@@ -1,4 +1,7 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.agent;
+
+import com.archonlaboratories.pacman.simulation.Action;
+import com.archonlaboratories.pacman.simulation.World;
 
 /**
  * Defines a pacman agent in the world.
@@ -13,7 +16,7 @@ public abstract class Pacman
      */
     private World.Tile location;
 
-    public Pacman(World.Tile initLocation)
+    Pacman(World.Tile initLocation)
     {
         this.location = initLocation;
     }
@@ -45,6 +48,6 @@ public abstract class Pacman
      *
      * @return The action pacman will perform.
      */
-    abstract Action nextAction();
+    public abstract Action nextAction();
 
 }

@@ -1,4 +1,7 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.agent;
+
+import com.archonlaboratories.pacman.simulation.Action;
+import com.archonlaboratories.pacman.simulation.World;
 
 /**
  * Implementation of Pacman where he moves randomly.
@@ -12,7 +15,7 @@ public class RandomPacman extends Pacman
     }
 
     @Override
-    Action nextAction()
+    public Action nextAction()
     {
         return Action.randomAction();
     }
