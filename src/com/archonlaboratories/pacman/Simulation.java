@@ -10,11 +10,21 @@ public class Simulation
      */
     private World.Tile[] ghostLocations;
 
+    World.Tile[] getGhostLocations()
+    {
+        return ghostLocations;
+    }
+
     public World world;
 
     private Pacman pacman;
 
     private Ghost[] ghosts;
+
+    Ghost[] getGhosts()
+    {
+        return ghosts;
+    }
 
     public static void main(String[] args)
     {
