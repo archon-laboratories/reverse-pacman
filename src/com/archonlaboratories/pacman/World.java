@@ -10,6 +10,18 @@ public class World
 {
     public Tile[][] tiles;
 
+    public World(boolean[][] activations)
+    {
+        tiles = new Tile[activations.length][activations[0].length];
+
+        for (int x = 0; x < activations.length; x++)
+            for (int y = 0; y < activations[x].length; y++)
+                if (activations[x][y])
+                    tiles[x][y] = new Tile(x, y);
+                else
+                    tiles[x][y] = null;
+    }
+
     /**
      * Defines a tile in the world.
      * Each tile is a discrete location.
@@ -69,22 +81,22 @@ public class World
         {
             nextTileMap = new HashMap<>(4);
 
-            if (xCoord <= 0)
+            if (xCoord <= 0 || tiles[xCoord - 1][yCoord] == null)
                 nextTileMap.put(Action.LEFT, this);
             else
                 nextTileMap.put(Action.LEFT, tiles[xCoord - 1][yCoord]);
 
-            if (xCoord >= tiles.length)
+            if (xCoord >= tiles.length || tiles[xCoord + 1][yCoord] == null)
                 nextTileMap.put(Action.RIGHT, this);
             else
                 nextTileMap.put(Action.RIGHT, tiles[xCoord + 1][yCoord]);
 
-            if (yCoord <= 0)
+            if (yCoord <= 0 || tiles[xCoord][yCoord - 1] == null)
                 nextTileMap.put(Action.UP, this);
             else
                 nextTileMap.put(Action.UP, tiles[xCoord][yCoord - 1]);
 
-            if (yCoord >= tiles[xCoord].length)
+            if (yCoord >= tiles[xCoord].length || tiles[xCoord][yCoord + 1] == null)
                 nextTileMap.put(Action.DOWN, this);
             else
                 nextTileMap.put(Action.DOWN, tiles[xCoord][yCoord + 1]);

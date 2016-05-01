@@ -1,5 +1,7 @@
 package com.archonlaboratories.pacman;
 
+import java.io.*;
+
 /**
  * Performs the simulation of reverse-pacman.
  */
@@ -18,17 +20,31 @@ public class Simulation
 
     public static void main(String[] args)
     {
-        // TODO
+        for (String arg : args)
+        {
+            File data = new File(arg);
+            Simulation sim = new Simulation();
+            sim.performSimulation(data);
+        }
     }
 
-    void performSimulation()
+    /**
+     * Performs teh simulation
+     *
+     * @param dataset File that contains the information for this simulation.
+     * @return Number of time-steps until the ghosts found pacman.
+     */
+    int performSimulation(File dataset)
     {
-        initSimulation();
+        initSimulation(dataset);
 
         boolean gameOverFlag = false;
+        int timeSteps = 0;
 
         while (!gameOverFlag)
         {
+            timeSteps++;
+
             for (Ghost ghost : ghosts)
             {
                 ghost.performUpdate();
@@ -45,16 +61,75 @@ public class Simulation
 
             gameOverFlag = gameOverFlag || isEndConditionMet();
         }
+
+        return timeSteps;
     }
 
-    private void initSimulation()
+    /**
+     * Initializes the simulation.
+     */
+    private void initSimulation(File dataset)
     {
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader(dataset));
 
+            // Read size of maze
+            String[] size = reader.readLine().split(",");
+            int x = Integer.parseInt(size[0]);
+            int y = Integer.parseInt(size[1]);
+
+            boolean[][] map = new boolean[x][y];
+
+            for (int row = 0; row < y; row++)
+            {
+                String line = reader.readLine();
+
+                for(int index = 0; index < line.length(); index++)
+                    map[index][row] = line.charAt(index) != 0;
+            }
+
+            world = new World(map); // init world
+
+            String[] pacmanLoc = reader.readLine().split(",");
+            int pacX = Integer.parseInt(pacmanLoc[0]);
+            int pacY = Integer.parseInt(pacmanLoc[1]);
+
+            pacman = new RandomPacman(world.tiles[pacX][pacY]);
+
+            int numGhosts = Integer.parseInt(reader.readLine());
+
+            ghostLocations = new World.Tile[numGhosts];
+            ghosts = new Ghost[numGhosts];
+
+
+            for (int ghostID = 0; ghostID < numGhosts; ghostID++)
+            {
+                String[] location = reader.readLine().split(",");
+                int xCoord = Integer.parseInt(location[0]);
+                int yCoord = Integer.parseInt(location[1]);
+
+                ghostLocations[ghostID] = world.tiles[xCoord][yCoord];
+                ghosts[ghostID] = new Ghost();
+            }
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Determines if a ghost is in the same Tile as pacman.
+     *
+     * @return True if a ghost is at pacman's location, else false.
+     */
     private boolean isEndConditionMet()
     {
-        // TODO
+        for(World.Tile tile : ghostLocations)
+            if (tile.equals(pacman.getLocation()))
+                return true;
+
         return false;
     }
 }
