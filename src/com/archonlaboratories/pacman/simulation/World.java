@@ -1,4 +1,4 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.simulation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class World
 {
-    public Tile[][] tiles;
+    public final Tile[][] tiles;
 
-    public World(boolean[][] activations)
+    World(boolean[][] activations)
     {
         tiles = new Tile[activations.length][activations[0].length];
 
@@ -26,7 +26,7 @@ public class World
      * Defines a tile in the world.
      * Each tile is a discrete location.
      */
-    class Tile
+    public class Tile
     {
         /**
          * Number of walls bordering this tile.
@@ -54,7 +54,7 @@ public class World
             this.numWalls = numWalls;
         }
 
-        public Tile(int xCoord, int yCoord)
+        Tile(int xCoord, int yCoord)
         {
             this.xCoord = xCoord;
             this.yCoord = yCoord;
@@ -106,7 +106,7 @@ public class World
         /**
          * @return The number of walls bordering this tile.
          */
-        int getNumWalls()
+        public int getNumWalls()
         {
             // Initialize numWalls if not done at construction
             if (numWalls < 0)

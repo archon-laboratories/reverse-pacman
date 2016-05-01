@@ -1,4 +1,8 @@
-package com.archonlaboratories.pacman;
+package com.archonlaboratories.pacman.simulation;
+
+import com.archonlaboratories.pacman.agent.Ghost;
+import com.archonlaboratories.pacman.agent.Pacman;
+import com.archonlaboratories.pacman.agent.RandomPacman;
 
 import java.io.*;
 
@@ -7,12 +11,15 @@ import java.io.*;
  */
 public class Simulation
 {
+
+    private static final boolean PRINT_OUTPUT = true;
+
     /**
      * Keeps track of the action locations of the ghosts.
      */
     private World.Tile[] ghostLocations;
 
-    World.Tile[] getGhostLocations()
+    public World.Tile[] getGhostLocations()
     {
         return ghostLocations;
     }
@@ -23,7 +30,7 @@ public class Simulation
 
     private Ghost[] ghosts;
 
-    Ghost[] getGhosts()
+    public Ghost[] getGhosts()
     {
         return ghosts;
     }
@@ -34,7 +41,9 @@ public class Simulation
         {
             File data = new File(arg);
             Simulation sim = new Simulation();
-            sim.performSimulation(data);
+            int timeSteps = sim.performSimulation(data);
+
+            if (PRINT_OUTPUT) System.out.printf("Simulation %s completed in %d timesteps.\n\n\n", arg, timeSteps);
         }
     }
 
@@ -44,7 +53,7 @@ public class Simulation
      * @param dataset File that contains the information for this simulation.
      * @return Number of time-steps until the ghosts found pacman.
      */
-    int performSimulation(File dataset)
+    private int performSimulation(File dataset)
     {
         initSimulation(dataset);
 
@@ -55,6 +64,8 @@ public class Simulation
         {
             timeSteps++;
 
+            if (PRINT_OUTPUT) System.out.printf("TIMESTEP: %d\n", timeSteps);
+
             for (Ghost ghost : ghosts)
             {
                 ghost.performUpdate();
@@ -64,11 +75,13 @@ public class Simulation
             {
                 Action ghostAction = ghosts[i].performAction();
                 ghostLocations[i] = ghostLocations[i].getNextTile(ghostAction);
+                if (PRINT_OUTPUT) System.out.printf("Ghost %d Action: %s\n", i, ghostAction);
             }
             gameOverFlag = isEndConditionMet();
 
             Action pacmanMovement = pacman.nextAction();
             pacman.setLocation(pacman.getLocation().getNextTile(pacmanMovement));
+            if (PRINT_OUTPUT) System.out.printf("Pacman Action: %s", pacmanMovement);
 
             gameOverFlag = gameOverFlag || isEndConditionMet();
         }
