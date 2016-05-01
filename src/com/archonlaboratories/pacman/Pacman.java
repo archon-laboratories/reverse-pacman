@@ -45,7 +45,7 @@ public abstract class Pacman
      *
      * @return The action pacman will perform.
      */
-    abstract Action performAction();
+    abstract Action nextAction();
 
     /**
      * Implementation of Pacman where he moves randomly.
@@ -59,7 +59,7 @@ public abstract class Pacman
         }
 
         @Override
-        Action performAction()
+        Action nextAction()
         {
             return Action.randomAction();
         }

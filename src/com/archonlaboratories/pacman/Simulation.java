@@ -41,7 +41,7 @@ public class Simulation
             }
             gameOverFlag = isEndConditionMet();
 
-            pacman.performAction();
+            pacman.nextAction();
 
             gameOverFlag = gameOverFlag || isEndConditionMet();
         }
