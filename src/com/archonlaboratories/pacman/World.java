@@ -120,5 +120,28 @@ public class World
         {
             return yCoord;
         }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == this)
+                return true;
+
+            if (obj == null)
+                return false;
+
+            if (getClass() != obj.getClass())
+                return false;
+
+            Tile tile = (Tile) obj;
+
+            return (xCoord == tile.xCoord && yCoord == tile.yCoord);
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return xCoord * 31 ^ yCoord * 37;
+        }
     }
 }
