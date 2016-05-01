@@ -57,7 +57,8 @@ public class Simulation
             }
             gameOverFlag = isEndConditionMet();
 
-            pacman.nextAction();
+            Action pacmanMovement = pacman.nextAction();
+            pacman.setLocation(pacman.getLocation().getNextTile(pacmanMovement));
 
             gameOverFlag = gameOverFlag || isEndConditionMet();
         }
