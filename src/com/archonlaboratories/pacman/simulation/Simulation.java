@@ -2,6 +2,7 @@ package com.archonlaboratories.pacman.simulation;
 
 import com.archonlaboratories.pacman.agent.Ghost;
 import com.archonlaboratories.pacman.agent.Pacman;
+import com.archonlaboratories.pacman.agent.Puppeteer;
 import com.archonlaboratories.pacman.agent.RandomPacman;
 
 import java.io.*;
@@ -14,25 +15,32 @@ public class Simulation
 
     private static final boolean PRINT_OUTPUT = true;
 
+    public World world;
+
+    private Ghost[] ghosts;
+
     /**
      * Keeps track of the action locations of the ghosts.
      */
     private World.Tile[] ghostLocations;
+
+    private Pacman pacman;
+
+    private Puppeteer puppeteer;
+
+    public Ghost[] getGhosts()
+    {
+        return ghosts;
+    }
 
     public World.Tile[] getGhostLocations()
     {
         return ghostLocations;
     }
 
-    public World world;
-
-    private Pacman pacman;
-
-    private Ghost[] ghosts;
-
-    public Ghost[] getGhosts()
+    public Puppeteer getPuppeteer()
     {
-        return ghosts;
+        return puppeteer;
     }
 
     public static void main(String[] args)
@@ -141,6 +149,8 @@ public class Simulation
         {
             e.printStackTrace();
         }
+
+        puppeteer = new Puppeteer(ghosts, world);
     }
 
     /**

@@ -22,6 +22,7 @@ public class Ghost
     {
         sensor = new WallSensor(current);
         world = current.world;
+        puppeteer = current.getPuppeteer();
         location = new BeliefState(world.getTileSet(), 1);
     }
 
