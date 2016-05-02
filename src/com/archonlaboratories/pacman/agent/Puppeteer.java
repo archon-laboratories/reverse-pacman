@@ -2,6 +2,7 @@ package com.archonlaboratories.pacman.agent;
 
 import com.archonlaboratories.pacman.simulation.Action;
 import com.archonlaboratories.pacman.simulation.BeliefState;
+import com.archonlaboratories.pacman.simulation.World;
 
 /**
  * Defines the puppeteer, which controls the ghosts.
@@ -9,7 +10,14 @@ import com.archonlaboratories.pacman.simulation.BeliefState;
  */
 public class Puppeteer
 {
-    BeliefState pacmanBelief;
+    private BeliefState pacmanBelief;
+    private Ghost[] ghosts;
+
+    public Puppeteer(Ghost[] ghosts, World world)
+    {
+        this.ghosts = ghosts;
+        pacmanBelief = new BeliefState(world.getTileSet(), 1);
+    }
 
     double calculateReward()
     {
