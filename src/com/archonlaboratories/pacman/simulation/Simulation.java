@@ -16,7 +16,8 @@ import java.io.IOException;
 public class Simulation
 {
 
-    private static final boolean PRINT_OUTPUT = true;
+    private static final boolean PRINT_OUTPUT = false;
+    private static final int NUM_TRIALS = 1000;
 
     public World world;
 
@@ -55,12 +56,22 @@ public class Simulation
     {
         for (String arg : args)
         {
+            int totalTime = 0;
             File data = new File(arg);
             Simulation sim = new Simulation();
-            int timeSteps = sim.performSimulation(data);
 
-            if (PRINT_OUTPUT)
-                System.out.printf("Simulation %s completed in %d timesteps.\n\n\n", arg, timeSteps);
+            for (int i = 0; i < NUM_TRIALS; i++)
+            {
+                int timeSteps = sim.performSimulation(data);
+                totalTime += timeSteps;
+
+                if (PRINT_OUTPUT)
+                    System.out.printf("Simulation %s completed in %d timesteps.\n\n\n", arg, timeSteps);
+            }
+
+            double averageTime = (double) totalTime / NUM_TRIALS;
+
+            System.out.printf("Simulation %s average over %d trials: %f\n\n", arg, NUM_TRIALS, averageTime);
         }
     }
 
