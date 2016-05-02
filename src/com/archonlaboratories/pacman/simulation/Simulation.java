@@ -122,7 +122,6 @@ public class Simulation
             }
 
             world = new World(map); // init world
-
             String[] pacmanLoc = reader.readLine().split(",");
             int pacX = Integer.parseInt(pacmanLoc[0]);
             int pacY = Integer.parseInt(pacmanLoc[1]);
