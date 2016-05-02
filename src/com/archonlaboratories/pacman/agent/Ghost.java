@@ -15,14 +15,16 @@ public class Ghost
 {
     private BeliefState location;
     private WallSensor sensor;
-    private Puppeteer puppeteer; // TODO: Figure out how puppeteer is assigned.
+    private PacmanSensor pacmanSensor;
+    private static Puppeteer puppeteer; // TODO: Figure out how puppeteer is assigned.
     private World world;
 
     public Ghost(Simulation current)
     {
         sensor = new WallSensor(current);
+        pacmanSensor = new PacmanSensor(current);
         world = current.world;
-        puppeteer = current.getPuppeteer();
+        puppeteer = (puppeteer == null) ? current.getPuppeteer() : puppeteer;
         location = new BeliefState(world.getTileSet(), 1);
     }
 
@@ -52,7 +54,6 @@ public class Ghost
         }
 
         location.normalizeBeliefState();
-
         puppeteer.updateReward(location);
         // Should this return void?
     }
@@ -62,10 +63,9 @@ public class Ghost
         return sensor.getSurroundingWalls();
     }
 
-    void getPacmanSensor()
+    boolean triggerPacmanSensor()
     {
-        // TODO
-        // Should this return void?
+        return pacmanSensor.sense();
     }
 
     /**
@@ -135,6 +135,7 @@ public class Ghost
             System.exit(10);
         }
 
+        // TODO make the result random
         int getSurroundingWalls()
         {
             double error = rnd.nextDouble();
@@ -158,12 +159,7 @@ public class Ghost
         }
 
         /**
-<<<<<<< HEAD
-         * Gets the probability of the given difference between
-         * evidence and reality at a tile.
-=======
          * Gets the probability of the given difference between evidence and reality at a tile.
->>>>>>> bdff5e0f4bcd24e8cd2629e0a92d23287533f82e
          *
          * @param difference absolute value of actual - evidence
          * @return Probability of this difference occurring.
@@ -184,6 +180,66 @@ public class Ghost
                     System.exit(10);
                     return -1; // Never reached
             }
+        }
+    }
+
+    private class PacmanSensor
+    {
+        /**
+         * The pseudo-random generator used by the wall sensor to create noise.
+         */
+        private Random rnd = new Random();
+
+        /**
+         * The index (in the array returned by the getGhostLocations in Simulation) of the ghost using this sensor.
+         */
+        private int ghostIndex;
+
+        /**
+         * The simulation that's currently running. This object is necessary so that the sensor can get the actual
+         * locations of the ghost and walls in order to return a noisy number.
+         */
+        private Simulation current;
+
+        /**
+         * Initializes the wall sensor
+         *
+         * @param container current Simulation the ghost is contained in.
+         */
+        PacmanSensor(Simulation container)
+        {
+            current = container;
+            Ghost[] ghosts = container.getGhosts();
+            for (int i = 0; i < ghosts.length; i++)
+            {
+                if (ghosts[i] == Ghost.this)
+                {
+                    ghostIndex = i;
+                    return;
+                }
+            }
+
+            System.err.println("Could not find this ghost in current simulation.");
+            System.exit(10);
+        }
+
+        boolean sense()
+        {
+            World.Tile pacLocation = current.getPacman().getLocation();
+            World.Tile ghostLocation = current.getGhostLocations()[ghostIndex];
+            if (Math.abs(pacLocation.getyCoord() - ghostLocation.getyCoord()) == 1 && (Math.abs(
+                    pacLocation.getxCoord() - ghostLocation.getxCoord())) == 1)
+                if (rnd.nextDouble() < getAccuracyFactor())
+                    return true;
+                else return false;
+            else if (rnd.nextDouble() < getAccuracyFactor())
+                return false;
+            else return true;
+        }
+
+        private double getAccuracyFactor()
+        {
+            return .9;
         }
     }
 

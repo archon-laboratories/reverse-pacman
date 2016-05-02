@@ -5,7 +5,10 @@ import com.archonlaboratories.pacman.agent.Pacman;
 import com.archonlaboratories.pacman.agent.Puppeteer;
 import com.archonlaboratories.pacman.agent.RandomPacman;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Performs the simulation of reverse-pacman.
@@ -27,6 +30,11 @@ public class Simulation
     private Pacman pacman;
 
     private Puppeteer puppeteer;
+
+    public Pacman getPacman()
+    {
+        return pacman;
+    }
 
     public Ghost[] getGhosts()
     {
@@ -51,7 +59,8 @@ public class Simulation
             Simulation sim = new Simulation();
             int timeSteps = sim.performSimulation(data);
 
-            if (PRINT_OUTPUT) System.out.printf("Simulation %s completed in %d timesteps.\n\n\n", arg, timeSteps);
+            if (PRINT_OUTPUT)
+                System.out.printf("Simulation %s completed in %d timesteps.\n\n\n", arg, timeSteps);
         }
     }
 
@@ -117,7 +126,7 @@ public class Simulation
             {
                 String line = reader.readLine();
 
-                for(int index = 0; index < line.length(); index++)
+                for (int index = 0; index < line.length(); index++)
                     map[index][row] = line.charAt(index) != 0;
             }
 
@@ -159,7 +168,7 @@ public class Simulation
      */
     private boolean isEndConditionMet()
     {
-        for(World.Tile tile : ghostLocations)
+        for (World.Tile tile : ghostLocations)
             if (tile.equals(pacman.getLocation()))
                 return true;
 

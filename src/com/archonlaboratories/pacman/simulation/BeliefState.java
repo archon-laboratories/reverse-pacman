@@ -68,7 +68,7 @@ public class BeliefState
      * Doesn't matter if not normalized, as long as all
      * values are replaced and are correct relative to each other.
      *
-     * @param tile Tile to set probability at
+     * @param tile        Tile to set probability at
      * @param probability Non-normalized probability
      */
     public void setProbability(World.Tile tile, double probability)
@@ -83,13 +83,15 @@ public class BeliefState
      */
     public void normalizeBeliefState()
     {
+        if (!dirty)
+            return;
         double sum = 0;
-        for(Double prob : beliefs.values())
+        for (Double prob : beliefs.values())
             sum += prob;
 
         double normFactor = 1 / sum;
 
-        for(World.Tile tile : beliefs.keySet())
+        for (World.Tile tile : beliefs.keySet())
             beliefs.put(tile, beliefs.get(tile) * normFactor);
 
         dirty = false;
