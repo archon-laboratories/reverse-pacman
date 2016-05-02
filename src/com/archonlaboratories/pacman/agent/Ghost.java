@@ -240,12 +240,8 @@ public class Ghost
             World.Tile ghostLocation = current.getGhostLocations()[ghostIndex];
             if (Math.abs(pacLocation.getyCoord() - ghostLocation.getyCoord()) == 1 && (Math.abs(
                     pacLocation.getxCoord() - ghostLocation.getxCoord())) == 1)
-                if (rnd.nextDouble() < getAccuracyFactor())
-                    return true;
-                else return false;
-            else if (rnd.nextDouble() < getAccuracyFactor())
-                return false;
-            else return true;
+                return rnd.nextDouble() < getAccuracyFactor();
+            else return rnd.nextDouble() >= getAccuracyFactor();
         }
 
         private double getAccuracyFactor()
