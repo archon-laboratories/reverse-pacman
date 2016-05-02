@@ -124,28 +124,37 @@ public class Puppeteer
 
         count = 0;
 
+        BeliefState beliefNotPacman = new BeliefState();
+
+        for (World.Tile tile : thisWorld.getTileSet())
+        {
+            beliefNotPacman.setProbability(tile, 1 - pacmanBelief.getProbability(tile));
+        }
         // This for loop actually calculates the probability that Pacman isn't there
         for (Ghost ghost : ghosts)
         {
             boolean sensedPacman = ghost.triggerPacmanSensor();
             for (World.Tile tile : thisWorld.getTileSet())
             {
-                pacmanBelief.setProbability(tile, pacmanBelief.getProbability(tile) + 1./ghosts.length * ghost.getBeliefState().getProbability(tile));
+                beliefNotPacman.setProbability(tile, beliefNotPacman.getProbability(tile) + 1./ghosts.length * ghost.getBeliefState().getProbability(tile));
                 for (Action action : Action.values())
                 {
                     World.Tile afterMove = tile.getNextTile(action);
                     if (!sensedPacman)
-                        pacmanBelief.setProbability(afterMove, pacmanBelief.getProbability(afterMove) + 1./ghosts.length * .9*ghost.getBeliefState().getProbability(afterMove));
+                        beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length * .9*ghost.getBeliefState().getProbability(tile));
                     else
-                        pacmanBelief.setProbability(afterMove, pacmanBelief.getProbability(afterMove) + 1./ghosts.length * .1*ghost.getBeliefState().getProbability(afterMove));
+                        beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length * .1*ghost.getBeliefState().getProbability(tile));
                 }
             }
         }
 
+        beliefNotPacman.normalizeBeliefState();
+
         for (World.Tile tile : thisWorld.getTileSet())
         {
-            pacmanBelief.setProbability(tile, 1 - pacmanBelief.getProbability(tile));
+            pacmanBelief.setProbability(tile, 1 - beliefNotPacman.getProbability(tile));
         }
+
         pacmanBelief.normalizeBeliefState();
     }
 }
