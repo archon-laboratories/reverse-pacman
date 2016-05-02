@@ -54,7 +54,6 @@ public class Ghost
         location.normalizeBeliefState();
 
         puppeteer.updateReward(location);
-
         // Should this return void?
     }
 
@@ -159,8 +158,7 @@ public class Ghost
         }
 
         /**
-         * Gets the probability of the given difference between
-         * evidence and reality at a tile.
+         * Gets the probability of the given difference between evidence and reality at a tile.
          *
          * @param difference absolute value of actual - evidence
          * @return Probability of this difference occurring.
