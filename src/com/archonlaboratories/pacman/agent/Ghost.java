@@ -147,27 +147,26 @@ public class Ghost
             System.exit(10);
         }
 
-        // TODO make the result random
         int getSurroundingWalls()
         {
             double error = rnd.nextDouble();
+            boolean positiveError = rnd.nextBoolean();
 
             int actual = current.getGhostLocations()[ghostIndex].getNumWalls();
 
-            if (error < .8)
-                return actual;
+            if (error < .8) // TODO: Move these probabilities somewhere more sensible
+                return capError(actual);
             if (error < .95)
-                return Math.abs(actual - 1);
+                return capError(actual + (positiveError ? 1 : -1));
             if (error < .99)
-                if (actual == 1)
-                    return 3;
-                else
-                    return Math.abs(actual - 2);
-
-            if (actual < 2)
-                return 3;
+                return capError(actual + (positiveError ? 2 : -2));
             else
-                return 0;
+                return capError(actual + (positiveError ? 3 : -3));
+        }
+
+        private int capError(int rawNumber)
+        {
+            return Math.min(Math.max(rawNumber, 0), 3);
         }
 
         /**
