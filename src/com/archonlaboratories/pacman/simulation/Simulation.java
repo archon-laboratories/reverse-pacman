@@ -98,7 +98,7 @@ public class Simulation
 
             Action pacmanMovement = pacman.nextAction();
             pacman.setLocation(pacman.getLocation().getNextTile(pacmanMovement));
-            if (PRINT_OUTPUT) System.out.printf("Pacman Action: %s", pacmanMovement);
+            if (PRINT_OUTPUT) System.out.printf("Pacman Action: %s\n", pacmanMovement);
 
             gameOverFlag = gameOverFlag || isEndConditionMet();
         }

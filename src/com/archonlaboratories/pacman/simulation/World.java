@@ -99,7 +99,7 @@ public class World
             else
                 nextTileMap.put(Action.LEFT, tiles[xCoord - 1][yCoord]);
 
-            if (xCoord >= tiles.length || tiles[xCoord + 1][yCoord] == null)
+            if (xCoord >= tiles.length - 1 || tiles[xCoord + 1][yCoord] == null)
                 nextTileMap.put(Action.RIGHT, this);
             else
                 nextTileMap.put(Action.RIGHT, tiles[xCoord + 1][yCoord]);
@@ -109,7 +109,7 @@ public class World
             else
                 nextTileMap.put(Action.UP, tiles[xCoord][yCoord - 1]);
 
-            if (yCoord >= tiles[xCoord].length || tiles[xCoord][yCoord + 1] == null)
+            if (yCoord >= tiles[xCoord].length - 1 || tiles[xCoord][yCoord + 1] == null)
                 nextTileMap.put(Action.DOWN, this);
             else
                 nextTileMap.put(Action.DOWN, tiles[xCoord][yCoord + 1]);

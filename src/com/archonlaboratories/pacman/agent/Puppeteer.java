@@ -23,6 +23,7 @@ public class Puppeteer
     {
         this.ghosts = ghosts;
         pacmanBelief = new BeliefState(world.getTileSet(), 1);
+        thisWorld = world;
     }
 
     // TODO Recommendation: Make an interface for coordinates so that a library can handle them

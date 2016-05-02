@@ -32,10 +32,10 @@ public class BeliefState
 
     public BeliefState(Set<World.Tile> tiles, double initValue)
     {
-        Map<World.Tile, Double> map = new HashMap<>();
+        beliefs = new HashMap<>();
 
         for (World.Tile tile : tiles)
-            map.put(tile, initValue);
+            beliefs.put(tile, initValue);
     }
 
     /**

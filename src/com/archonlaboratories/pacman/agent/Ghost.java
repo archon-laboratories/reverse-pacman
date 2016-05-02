@@ -16,15 +16,14 @@ public class Ghost
     private BeliefState location;
     private WallSensor sensor;
     private PacmanSensor pacmanSensor;
-    private static Puppeteer puppeteer; // TODO: Figure out how puppeteer is assigned.
+    private static Puppeteer puppeteer;
     private World world;
+    private Simulation current;
 
     public Ghost(Simulation current)
     {
-        sensor = new WallSensor(current);
-        pacmanSensor = new PacmanSensor(current);
+        this.current = current;
         world = current.world;
-        puppeteer = (puppeteer == null) ? current.getPuppeteer() : puppeteer;
         location = new BeliefState(world.getTileSet(), 1);
     }
 
@@ -54,17 +53,27 @@ public class Ghost
         }
 
         location.normalizeBeliefState();
+
+        if (puppeteer == null)
+            puppeteer = current.getPuppeteer();
+
         puppeteer.updateReward(location);
         // Should this return void?
     }
 
     private int performSensing()
     {
+        if (sensor == null)
+            sensor = new WallSensor(current);
+
         return sensor.getSurroundingWalls();
     }
 
     boolean triggerPacmanSensor()
     {
+        if (pacmanSensor == null)
+            pacmanSensor = new PacmanSensor(current);
+
         return pacmanSensor.sense();
     }
 
@@ -76,6 +85,9 @@ public class Ghost
      */
     public Action performAction()
     {
+        if (puppeteer == null)
+            puppeteer = current.getPuppeteer();
+
         Action actionToTake = puppeteer.requestAction(location);
         BeliefState nextLocation = new BeliefState(world.getTileSet(), 0);
 
