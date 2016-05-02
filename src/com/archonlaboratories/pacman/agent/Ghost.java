@@ -16,7 +16,7 @@ public class Ghost
     private BeliefState location;
     private WallSensor sensor;
     private PacmanSensor pacmanSensor;
-    private static Puppeteer puppeteer;
+    public static Puppeteer puppeteer;
     private World world;
     private Simulation current;
 

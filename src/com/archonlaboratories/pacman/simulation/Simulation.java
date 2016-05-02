@@ -111,6 +111,8 @@ public class Simulation
      */
     private void initSimulation(File dataset)
     {
+        Ghost.puppeteer = null;
+
         try
         {
             BufferedReader reader = new BufferedReader(new FileReader(dataset));
