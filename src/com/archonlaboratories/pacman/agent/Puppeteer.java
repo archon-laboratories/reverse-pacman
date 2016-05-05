@@ -62,13 +62,13 @@ public class Puppeteer
      * @param testing The tile whose value is being calculated
      * @return The reward for that tile
      */
-    private double calculateReward(World.Tile testing, BeliefState ghostLocation)
+    private double calculateReward(World.Tile testing, BeliefState ghostLocation, Action action)
     {
         double result = 0;
         double ghostProb = ghostLocation.getProbability(testing);
 
         for (World.Tile pacLocation : pacmanBelief.getTileSet())
-            result += pDiv(1, ghostProb * getDistance(testing, pacLocation)) * pacmanBelief.getProbability(pacLocation);
+            result += pDiv(1, ghostProb*getDistance(testing.getNextTile(action), pacLocation)) * pacmanBelief.getProbability(pacLocation);
 
         return result;
     }
@@ -88,18 +88,12 @@ public class Puppeteer
     Action requestAction(BeliefState ghostLocation)
     {
         double[] bestChoice = new double[Action.values().length];
-        Map<World.Tile, Double> rewardDistribution = new HashMap<>();
-
-        for (World.Tile tile : thisWorld.getTileSet())
-        {
-            rewardDistribution.put(tile, calculateReward(tile, ghostLocation));
-        }
 
         for (World.Tile tile : thisWorld.getTileSet())
         {
             for (int i = 0; i < bestChoice.length; i++)
             {
-                bestChoice[i] += rewardDistribution.get(tile.getNextTile(Action.values()[i]));
+                bestChoice[i] += calculateReward(tile, ghostLocation, Action.values()[i]);
             }
         }
 
