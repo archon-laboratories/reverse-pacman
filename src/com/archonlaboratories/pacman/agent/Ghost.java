@@ -238,8 +238,8 @@ public class Ghost
         {
             World.Tile pacLocation = current.getPacman().getLocation();
             World.Tile ghostLocation = current.getGhostLocations()[ghostIndex];
-            if (Math.abs(pacLocation.getyCoord() - ghostLocation.getyCoord()) == 1 && (Math.abs(
-                    pacLocation.getxCoord() - ghostLocation.getxCoord())) == 1)
+            
+            if (Puppeteer.getDistance(pacLocation, ghostLocation) <= 1)
                 return rnd.nextDouble() < getAccuracyFactor();
             else return rnd.nextDouble() >= getAccuracyFactor();
         }

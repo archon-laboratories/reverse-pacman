@@ -164,6 +164,12 @@ public class World
         }
 
         @Override
+        public String toString()
+        {
+            return String.format("(%d, %d)", xCoord, yCoord);
+        }
+
+        @Override
         public int hashCode()
         {
             return xCoord * 31 ^ yCoord * 37;

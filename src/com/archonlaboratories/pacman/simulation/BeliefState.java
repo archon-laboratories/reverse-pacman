@@ -17,7 +17,7 @@ public class BeliefState
     /**
      * Marks if this BeliefState is currently normalized.
      */
-    private boolean dirty;
+    private boolean dirty = true;
 
     public BeliefState()
     {
@@ -27,7 +27,6 @@ public class BeliefState
     public BeliefState(Map<World.Tile, Double> beliefs)
     {
         this.beliefs = beliefs;
-        dirty = true;
     }
 
     public BeliefState(Set<World.Tile> tiles, double initValue)
@@ -35,7 +34,7 @@ public class BeliefState
         beliefs = new HashMap<>();
 
         for (World.Tile tile : tiles)
-            beliefs.put(tile, initValue);
+            setProbability(tile, initValue);
     }
 
     /**
@@ -47,9 +46,6 @@ public class BeliefState
      */
     public double getProbability(World.Tile tile)
     {
-//        if (dirty)
-//            this.normalizeBeliefState(); // handle elegantly later.
-
         return beliefs.get(tile);
     }
 

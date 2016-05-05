@@ -23,6 +23,7 @@ public class Puppeteer
     {
         this.ghosts = ghosts;
         pacmanBelief = new BeliefState(world.getTileSet(), 1);
+        pacmanBelief.normalizeBeliefState();
         thisWorld = world;
     }
 
@@ -35,7 +36,7 @@ public class Puppeteer
      * @param b The second tile
      * @return The manhattan distance between tile a and tile b.
      */
-    private int getDistance(World.Tile a, World.Tile b)
+    static int getDistance(World.Tile a, World.Tile b)
     {
         return Math.abs(a.getxCoord() - b.getxCoord()) + Math.abs(a.getyCoord() - b.getyCoord());
     }
@@ -47,7 +48,7 @@ public class Puppeteer
      */
     private double pDiv(double a, double b)
     {
-        return (b == 0) ? 10 : a / b;
+        return (b == 0) ? 0 : a / b;
     }
 
     /**
@@ -67,7 +68,7 @@ public class Puppeteer
         double ghostProb = ghostLocation.getProbability(testing);
 
         for (World.Tile pacLocation : pacmanBelief.getTileSet())
-            result += ghostProb * pDiv(1, getDistance(testing, pacLocation)) * pacmanBelief.getProbability(pacLocation);
+            result += pDiv(1, ghostProb * getDistance(testing, pacLocation)) * pacmanBelief.getProbability(pacLocation);
 
         return result;
     }
@@ -77,7 +78,7 @@ public class Puppeteer
      *
      * This function works by the following algorithm:
      *  * For every tile
-     *      * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be,
+     *      * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be in,
      *          * The inverse of the manhattan distance (using the method pDiv) times the belief that pacman is in that tile
      *
      *
