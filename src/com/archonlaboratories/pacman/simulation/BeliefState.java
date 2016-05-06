@@ -26,7 +26,7 @@ public class BeliefState
 
     public BeliefState(Map<World.Tile, Double> beliefs)
     {
-        this.beliefs = beliefs;
+        this.beliefs = new HashMap<>(beliefs);
     }
 
     public BeliefState(Set<World.Tile> tiles, double initValue)
