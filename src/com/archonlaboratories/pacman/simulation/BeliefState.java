@@ -42,7 +42,7 @@ public class BeliefState
      * Normalizes if not done yet.
      *
      * @param tile Tile to get belief state at.
-     * @return
+     * @return the probability at that tile.
      */
     public double getProbability(World.Tile tile)
     {

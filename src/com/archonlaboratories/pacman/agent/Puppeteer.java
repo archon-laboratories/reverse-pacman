@@ -12,9 +12,9 @@ public class Puppeteer
 {
     private BeliefState pacmanBelief;
     private Ghost[] ghosts;
-    World thisWorld;
+    private World thisWorld;
 
-    int count = 0;
+    private int count = 0;
 
     public Puppeteer(Ghost[] ghosts, World world)
     {
@@ -71,11 +71,11 @@ public class Puppeteer
 
     /**
      * Gets the action to take, given the current BeliefState of the ghost.
-     * <p>
+     *
      * This function works by the following algorithm:
-     * * For every tile
-     * * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be in,
-     * * The inverse of the manhattan distance (using the method pDiv) times the belief that pacman is in that tile
+     *  * For every tile
+     *      * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be in,
+     *          * The inverse of the manhattan distance (using the method pDiv) times the belief that pacman is in that tile
      *
      * @param ghostLocation Belief of the ghost's current location
      * @return Action to take.
@@ -95,7 +95,6 @@ public class Puppeteer
 
         return Action.values()[argmax];
     }
-
 
     /**
      * Updates the pacman BeliefState based on the locations and senses from the ghost.

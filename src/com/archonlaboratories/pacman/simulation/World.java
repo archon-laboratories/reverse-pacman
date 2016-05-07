@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class World
 {
-    public final Tile[][] tiles;
+    final Tile[][] tiles;
     private final Set<Tile> tileSet;
 
     World(boolean[][] activations)
