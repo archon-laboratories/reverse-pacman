@@ -60,6 +60,21 @@ public class BeliefState
     }
 
     /**
+     * Returns the inverse probability
+     */
+    public static BeliefState getInverseBeliefState(BeliefState toInvert)
+    {
+        BeliefState newSet = new BeliefState();
+        for (World.Tile key : toInvert.getTileSet())
+        {
+            newSet.setProbability(key, 1 - toInvert.getProbability(key));
+        }
+
+        newSet.normalizeBeliefState();
+        return newSet;
+    }
+
+    /**
      * Sets the probability of being at the given tile.
      * Doesn't matter if not normalized, as long as all
      * values are replaced and are correct relative to each other.

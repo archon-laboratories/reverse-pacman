@@ -57,8 +57,7 @@ public class Ghost
         if (puppeteer == null)
             puppeteer = current.getPuppeteer();
 
-        puppeteer.updateReward(location);
-        // Should this return void?
+        puppeteer.updateReward();
     }
 
     private int performSensing()
