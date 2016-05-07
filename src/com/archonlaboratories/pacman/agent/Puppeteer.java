@@ -4,9 +4,6 @@ import com.archonlaboratories.pacman.simulation.Action;
 import com.archonlaboratories.pacman.simulation.BeliefState;
 import com.archonlaboratories.pacman.simulation.World;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Defines the puppeteer, which controls the ghosts.
  * This simulates perfect communication.
@@ -74,12 +71,11 @@ public class Puppeteer
 
     /**
      * Gets the action to take, given the current BeliefState of the ghost.
-     *
+     * <p>
      * This function works by the following algorithm:
-     *  * For every tile
-     *      * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be in,
-     *          * The inverse of the manhattan distance (using the method pDiv) times the belief that pacman is in that tile
-     *
+     * * For every tile
+     * * Multiply the belief that the ghost is in that tile by the sum of, for each tile pacman might be in,
+     * * The inverse of the manhattan distance (using the method pDiv) times the belief that pacman is in that tile
      *
      * @param ghostLocation Belief of the ghost's current location
      * @return Action to take.
@@ -100,49 +96,40 @@ public class Puppeteer
         return Action.values()[argmax];
     }
 
+
     /**
-     * Updates the pacman BeliefState based on the latest location from the ghost.
-     *
-     * @param ghostLocation Current Estimate of Ghost's location
+     * Updates the pacman BeliefState based on the locations and senses from the ghost.
      */
-    void updateReward(BeliefState ghostLocation)
+    void updateReward()
     {
         if (++count != ghosts.length)
             return;
 
         count = 0;
 
-        BeliefState beliefNotPacman = new BeliefState();
+        BeliefState beliefNotPacman = BeliefState.getInverseBeliefState(pacmanBelief);
 
-        for (World.Tile tile : thisWorld.getTileSet())
-        {
-            beliefNotPacman.setProbability(tile, 1 - pacmanBelief.getProbability(tile));
-        }
         // This for loop actually calculates the probability that Pacman isn't there
         for (Ghost ghost : ghosts)
         {
             boolean sensedPacman = ghost.triggerPacmanSensor();
             for (World.Tile tile : thisWorld.getTileSet())
             {
-                beliefNotPacman.setProbability(tile, beliefNotPacman.getProbability(tile) + 1./ghosts.length * ghost.getBeliefState().getProbability(tile));
+                beliefNotPacman.setProbability(tile, beliefNotPacman.getProbability(tile) + 1./ghosts.length*ghost.getBeliefState().getProbability(tile));
+
                 for (Action action : Action.values())
                 {
                     World.Tile afterMove = tile.getNextTile(action);
-                    if (!sensedPacman)
-                        beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length * .9*ghost.getBeliefState().getProbability(tile));
-                    else
-                        beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length * .1*ghost.getBeliefState().getProbability(tile));
+                    if (afterMove != tile)
+                        if (!sensedPacman)
+                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length*.9*ghost.getBeliefState().getProbability(tile));
+                        else
+                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length*.1*ghost.getBeliefState().getProbability(tile));
                 }
             }
         }
 
         beliefNotPacman.normalizeBeliefState();
-
-        for (World.Tile tile : thisWorld.getTileSet())
-        {
-            pacmanBelief.setProbability(tile, 1 - beliefNotPacman.getProbability(tile));
-        }
-
-        pacmanBelief.normalizeBeliefState();
+        pacmanBelief = BeliefState.getInverseBeliefState(beliefNotPacman);
     }
 }

@@ -126,7 +126,7 @@ public class World
             {
                 int wallCounter = 0;
 
-                for(Action action : Action.values())
+                for (Action action : Action.values())
                     if (getNextTile(action) == this)
                         wallCounter++;
 

@@ -26,7 +26,7 @@ public class BeliefState
 
     public BeliefState(Map<World.Tile, Double> beliefs)
     {
-        this.beliefs = beliefs;
+        this.beliefs = new HashMap<>(beliefs);
     }
 
     public BeliefState(Set<World.Tile> tiles, double initValue)
@@ -57,6 +57,21 @@ public class BeliefState
     public void clearBeliefState()
     {
         beliefs.clear();
+    }
+
+    /**
+     * Returns the inverse probability
+     */
+    public static BeliefState getInverseBeliefState(BeliefState toInvert)
+    {
+        BeliefState newSet = new BeliefState();
+        for (World.Tile key : toInvert.getTileSet())
+        {
+            newSet.setProbability(key, 1 - toInvert.getProbability(key));
+        }
+
+        newSet.normalizeBeliefState();
+        return newSet;
     }
 
     /**

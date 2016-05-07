@@ -1,9 +1,6 @@
 package com.archonlaboratories.pacman.simulation;
 
-import com.archonlaboratories.pacman.agent.Ghost;
-import com.archonlaboratories.pacman.agent.Pacman;
-import com.archonlaboratories.pacman.agent.Puppeteer;
-import com.archonlaboratories.pacman.agent.RandomPacman;
+import com.archonlaboratories.pacman.agent.*;
 
 import java.io.BufferedReader;
 import java.io.File;
