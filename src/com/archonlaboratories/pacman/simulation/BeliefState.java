@@ -60,7 +60,7 @@ public class BeliefState
     }
 
     /**
-     * Returns the inverse probability
+     * Returns the inverse probability distribution
      */
     public static BeliefState getInverseBeliefState(BeliefState toInvert)
     {

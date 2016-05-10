@@ -107,6 +107,7 @@ public class Puppeteer
         count = 0;
 
         BeliefState beliefNotPacman = BeliefState.getInverseBeliefState(pacmanBelief);
+        beliefNotPacman.normalizeBeliefState();
 
         // This for loop actually calculates the probability that Pacman isn't there
         for (Ghost ghost : ghosts)
@@ -114,16 +115,16 @@ public class Puppeteer
             boolean sensedPacman = ghost.triggerPacmanSensor();
             for (World.Tile tile : thisWorld.getTileSet())
             {
-                beliefNotPacman.setProbability(tile, beliefNotPacman.getProbability(tile) + 1./ghosts.length*ghost.getBeliefState().getProbability(tile));
+                beliefNotPacman.setProbability(tile, .8*beliefNotPacman.getProbability(tile) + 1000*1./ghosts.length*ghost.getBeliefState().getProbability(tile));
 
                 for (Action action : Action.values())
                 {
                     World.Tile afterMove = tile.getNextTile(action);
                     if (afterMove != tile)
                         if (!sensedPacman)
-                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length*.9*ghost.getBeliefState().getProbability(tile));
+                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1000*1./ghosts.length*.9*ghost.getBeliefState().getProbability(tile));
                         else
-                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1./ghosts.length*.1*ghost.getBeliefState().getProbability(tile));
+                            beliefNotPacman.setProbability(afterMove, beliefNotPacman.getProbability(afterMove) + 1000*1./ghosts.length*.1*ghost.getBeliefState().getProbability(tile));
                 }
             }
         }
